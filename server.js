@@ -20,7 +20,7 @@ var oneDay 	= 	86400000;
 var PORT = process.env.PORT || process.argv[2] || 8020;
 var IPADDRESS = process.env.IP || '127.0.0.1';
 
-console.log("Server Started. Listening on PORT "+PORT);
+console.log("Server Started. Listening on PORT " + PORT);
 
 server 	= 	express();
 server.use(express.compress());
@@ -40,17 +40,23 @@ server.configure(function(){
 	});
 });
 
+
+//routes
 server.all("*", function(req, res, next) {
-	var request = req.params[0];
-	if((request === "/")||(request === "")) {
+	
+  var request = req.params[0];
+	
+  if((request === "/")||(request === "")) {
 		request = "/index.html";
 	}
+
 	if((request.substr(0, 1) === "/")&&(request.substr(request.length - 4) === "html")) {
 		request = request.substr(1);
 		res.render(request);
 	} else {
 		next();
 	}
+
 });
 
 socket_listener = require('http').createServer(server);
@@ -74,10 +80,9 @@ fs.readdir('./node_modules', function (err, files) {
 
 io.sockets.on('connection', function (socket) {
 		
-	socket.emit('connectionMsg', "This message was bdelivered from the server via web sockets");
+	socket.emit('connectionMsg', "This message was delivered from the server via web sockets");
 	socket.emit('modules', modules);
 
-  
 
 });
 
@@ -85,5 +90,13 @@ io.sockets.on('start', function(data) {
     console.log(data);
 });
 
+
+var testList = {
+  "one"
+  , "two"
+  , "three"
+  , "four"
+  , "five"
+}
 
 server.listen(PORT);
